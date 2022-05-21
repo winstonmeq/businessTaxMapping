@@ -1,18 +1,20 @@
-import 'dart:convert';
 
+import 'package:businesstaxmap/models/business.dart';
 import 'package:businesstaxmap/models/category.dart';
 import 'package:businesstaxmap/models/linebusiness.dart';
 import 'package:businesstaxmap/services/business_services.dart';
-import 'package:businesstaxmap/services/categoryservices.dart';
-import 'package:businesstaxmap/screen/lineBus.dart';
 import 'package:flutter/material.dart';
+
+import 'lineBus.dart';
 
 
 
 class AddLineBus extends StatefulWidget {
+
   final int busId;
   final String busName;
-  AddLineBus(this.busId, this.busName);
+  final Business busdata;
+  AddLineBus(this.busId, this.busName,this.busdata);
 
   // const lineBusiness({Key key}) : super(key: key);
 
@@ -27,136 +29,62 @@ class _AddLineBusState extends State<AddLineBus> {
   bool isLoading = true;
 
 
-
-
-
   List<bool> checkbool = [];
 
-  List<Category> arrayCat;
+  List<Category> categoryarray = [];
 
-
-  _getCategory() async {
-    try {
-      arrayCat = <Category>[];
-      var _categoryServices = CategoryServices();
-      var registeredUser = await _categoryServices.getCategory();
-      var _list = json.decode(registeredUser.body);
-      print(_list);
-
-      _list.forEach((data){
-        var cat = Category();
-
-        cat.id = data['id'];
-        cat.category_name = data['category_name'];
-        cat.is_pushed = data['is_pushed'];
-
-        setState(() {
-          arrayCat.add(cat);
-          checkbool.add(false);
-        });
-
-      });
-
-    } catch (e) {
-      print(e);
-      setState(() {
-        isLoading = false;
-      });
-    }
-    setState(() {
-      delTable();
-      isLoading = false;
-    });
-  }
-
-
-
-  _getSQLData() async {
+  _getCategoryTable() async {
     try{
       var _businessServices = BusinessServices();
-      //listlinebus = <LineBusiness>[];
-      var sqlresponse = await _businessServices.getSQLdata();
-      print("from sql");
+      var sqlresponse = await _businessServices.getSQLcategoryTable();
+      print("get category table from sqldb para eh add sa category array");
+      print(sqlresponse);
 
       if(sqlresponse != null) {
         sqlresponse.forEach((data) {
-          var bil = LineBusiness();
-          // bil.id = data['id'];
-          bil.category = data['category'];
-          bil.business = data['business'];
-          bil.cat_name = data['cat_name'];
-          //bil.is_pushed = data['is_pushed'];
-          //bil.created_by = data['created_by'];
+
+          var cate = Category();
+          cate.id = data['id'];
+          cate.category_name = data['category_name'];
 
           setState(() {
-            listlinebus.add(bil);
+            categoryarray.add(cate);
+            checkbool.add(false);
           });
+
+
         });
+      }//endif
 
 
-      }else{
-        print("null value");
-      }
+              setState(() {
+                isLoading = false;
+              });
+
+
+
     }catch(e){
+
       print(e);
-      setState(() {
-        isLoading = false;
-      });
+
+            setState(() {
+              isLoading = false;
+            });
     }
 
-    listlinebus.forEach((ad) {
-      var bdata = LineBusiness();
-      // bdata.id = ad.id;
-      bdata.category = ad.category;
-      bdata.business = ad.business;
-      bdata.cat_name = ad.cat_name;
-      bdata.is_pushed = ad.is_pushed;
-      bdata.created_by = ad.created_by;
-      _lineBusSend(context, bdata);
-
-    });
+  print(categoryarray.length);
 
   }
-
-
-
-
-  _lineBusSend(BuildContext context, LineBusiness linedata) async {
-    try {
-      var _businessServices = BusinessServices();
-      var registeredUser = await _businessServices.sendLineBus(linedata);
-      print("sending data");
-      var _list = json.decode(registeredUser.body);
-
-      print(_list);
-
-    } catch (e) {
-      print(e);
-    }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LineBus(this.widget.busId, this.widget.busName)),
-    );
-  }
-
-
-  delTable() async{
-    var _businessServices = BusinessServices();
-    var result = await _businessServices.delSQLtable();
-    print("delete table");
-    // print(result);
-
-  }
-
 
 
 
   BusinessServices busServices = BusinessServices();
+
   List<LineBusiness> listlinebus = [];
 
   ///save to ddata to sqllite
-  _addToSQL(BuildContext context, LineBusiness data) async {
-    var result = await busServices.addToDB(data);
+  _addToLineBusSQL(BuildContext context, LineBusiness data) async {
+    var result = await busServices.addToLineBus(data);
 
     if (result > 0) {
       //  _showError(context, "complete download");
@@ -170,8 +98,7 @@ class _AddLineBusState extends State<AddLineBus> {
 
   @override
   void initState() {
-    _getCategory();
-
+    _getCategoryTable();
     super.initState();
   }
 
@@ -182,18 +109,10 @@ class _AddLineBusState extends State<AddLineBus> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading:  IconButton(onPressed: (){
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LineBus(this.widget.busId, this.widget.busName)),
-          );
-        }, icon: Icon(Icons.arrow_back)),
-        title: Text("Category Business"),),
+         title: Text("Category Business"),),
       body: isLoading ? Center(child: CircularProgressIndicator(),) : ListView.builder(
-          itemCount: arrayCat.length,
+          itemCount: categoryarray.length,
           itemBuilder: (context,index){
-            Category cate = Category();
 
             return Container(
                 child: Column(
@@ -211,18 +130,19 @@ class _AddLineBusState extends State<AddLineBus> {
                                 });
                               }),
 
-                          title: Text("${arrayCat[index].category_name}"),
+                          title: Text("${categoryarray[index].category_name}"),
                           trailing: ElevatedButton(
                             onPressed: (){
 
                               var linebus = LineBusiness();
-                              //linebus.id = 0; dile eh apil kay naa automatic nga id sa sql------------
+
                               linebus.business = this.widget.busId;
-                              linebus.category = arrayCat[index].id;
-                              linebus.cat_name = arrayCat[index].category_name;
-                              linebus.is_pushed = true;
-                              linebus.created_by = 1;
-                                _addToSQL(context, linebus);
+                              linebus.category = categoryarray[index].id;
+                              linebus.comment = "Added on ${categoryarray[index].category_name}, ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
+                              linebus.cat_name = categoryarray[index].category_name;
+                              linebus.is_pushed = 'true';
+                             linebus.created_by = 1;
+                             _addToLineBusSQL(context, linebus);
 
 
                               setState(() {
@@ -239,24 +159,24 @@ class _AddLineBusState extends State<AddLineBus> {
 
             );}
       ),
-      bottomNavigationBar:Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: Expanded(
-              child:  ElevatedButton(onPressed: (){
-
-                _getSQLData();
-
-
-
-              }, child: Text("Save")),
-            ),
-          )
-
-        ],
-
-      )
+      // bottomNavigationBar:Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     Container(
+      //       child: Expanded(
+      //         child:  ElevatedButton(onPressed: (){
+      //
+      //         //  _getSQLData();
+      //
+      //
+      //
+      //         }, child: Text("Save")),
+      //       ),
+      //     )
+      //
+      //   ],
+      //
+      // )
 
     );
 

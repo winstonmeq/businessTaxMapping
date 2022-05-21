@@ -8,9 +8,9 @@ class LocationService{
     _repository = Repository();
   }
 
-  getLocation() async {
-    return await _repository.httpGet3('locations.json');
-  }
+  // getLocation() async {
+  //   return await _repository.httpGet3('locations.json');
+  // }
 
 
 

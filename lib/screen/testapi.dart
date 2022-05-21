@@ -100,7 +100,7 @@ class _TestApiState extends State<TestApi> {
                       var bar = Barangay();
 
                       bar.barangay_name = "name4";
-                      bar.is_delete = 'false';
+                      // bar.is_delete = 'false';
 
                       _barangaySend(context, bar);
                     },

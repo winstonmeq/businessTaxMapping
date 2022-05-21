@@ -79,18 +79,19 @@ class _EditBusiness2State extends State<EditBusiness2> {
 
 
 
-  List<String> gender = ['female','male'];
-  List<String> isbusinesspermit = ['yes','no'];
-  List<String> isnotice = ['serve','unserve'];
-  List<String> businesstatus = ['ACTIVE1','ACTIVE2','INACTIVE'];
-  List<String> paymenttype= ['annual','semi-annual','quarterly'];
-  List<String> fsicmap = ['yes','no'];
-  List<String> locationstatus = ['owned','rented'];
-  List<String> applicationstatus = ['new','renew'];
-  List<String> inactivereason = ['temporary','suspended','closed'];
-  List<String> submittedfrom = ['web','mobile'];
-  List<String> businesspermitstatus = ['FIRST','SECOND','FINAL','CLOSURE'];
-  List<String> ownershiptype = ["single","partnership", "corporation","cooperative"];
+  //List<String> gender = ['Female','Male'];
+  List<String> isbusinesspermit = ['YES','NO',"NONE"];
+  List<String> isnotice = ['SERVE','UNSERVE',"NONE"];
+  List<String> businesstatus = ['ACTIVE W/O EXTENSION','ACTIVE WITH EXTENSION','INACTIVE',"NONE"];
+  List<String> paymenttype= ['ANNUAL','SEMI-ANNUAL','QUARTER',"NONE"];
+  List<String> fsicmap = ['YES','NO',"NONE"];
+  List<String> locationstatus = ['OWNED','RENTED',"NONE"];
+  List<String> applicationstatus = ['NEW','RENEW',"NONE"];
+  List<String> inactivereason = ['TEMPORARY CLOSED','SUSPENDED','CLOSED',"NONE"];
+  List<String> businesspermitstatus = ['FIRST NOTICE','SECOND NOTICE','FINAL NOTICE','CLOSE',"NONE"];
+  List<String> ownershiptype = ["SINGLE PROPRIETOR","PARTNERSHIP", "CORPORATION","COOPERATIVE","NONE"];
+
+
 
   List<Barangay> barangayList = [];
 
@@ -99,6 +100,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
   final id = TextEditingController();
   final qr_code = TextEditingController();
   final qrcode = TextEditingController();
+  final business_code = TextEditingController();
   final business_name = TextEditingController();
   final barangay = TextEditingController();
   final bar_name = TextEditingController();
@@ -129,6 +131,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
   final application_status= TextEditingController();
   final capitalization_amount= TextEditingController(text:'0.00');
   final gross_sale_amount= TextEditingController(text:'0.00');
+  final annual_amount= TextEditingController(text:'0.00');
   final total_employees= TextEditingController();
   final total_male= TextEditingController();
   final total_female= TextEditingController();
@@ -152,6 +155,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
   changetext(){
     qr_code.text = this.widget.busdata.qr_code;
     qrcode.text = this.widget.busdata.qrcode.toString();
+    business_code.text = this.widget.busdata.business_code;
     business_name.text = this.widget.busdata.business_name;
     barangay.text = this.widget.busdata.barangay.toString();
     bar_name.text = this.widget.busdata.bar_name;
@@ -182,6 +186,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
     application_status.text= this.widget.busdata.application_status;
     capitalization_amount.text= this.widget.busdata.capitalization_amount;
     gross_sale_amount.text= this.widget.busdata.gross_sale_amount;
+    annual_amount.text= this.widget.busdata.annual_amount;
     total_employees.text= this.widget.busdata.total_employees.toString();
     total_male.text= this.widget.busdata.total_male.toString();
     total_female.text= this.widget.busdata.total_female.toString();
@@ -306,7 +311,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
 
         bar.id = data['id'];
         bar.barangay_name = data['barangay_name'];
-        bar.is_delete = data['is_delete'];
+
 
         setState(() {
           barangayList.add(bar);
@@ -336,45 +341,45 @@ class _EditBusiness2State extends State<EditBusiness2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Business"),
+        title: Text("Edit Business j"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            Container(
-              height:90,
-              //color: Colors.yellow,
-              child: Image.network(
-                "${qrcode_url}",
-              ),
-            ),
-
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: qr_code,
-              decoration: InputDecoration(
-                labelText: 'qr_code',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
+            // Container(
+            //   height:90,
+            //   //color: Colors.yellow,
+            //   child: Image.network(
+            //     "${qrcode_url}",
+            //   ),
+            // ),
+            //
+            // TextField(
+            //   style: TextStyle(fontSize: 16),
+            //   keyboardType: TextInputType.visiblePassword,
+            //   controller: qr_code,
+            //   decoration: InputDecoration(
+            //     labelText: 'qr_code',
+            //     labelStyle: TextStyle(fontSize: 12),
+            //     contentPadding: EdgeInsets.all(5),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 10,
             ),
             TextField(
               style: TextStyle(fontSize: 16),
               keyboardType: TextInputType.visiblePassword,
-              controller: qrcode,
+              controller: business_code,
               decoration: InputDecoration(
-                labelText: 'qrcode Id',
+                labelText: 'Business Code',
                 labelStyle: TextStyle(fontSize: 12),
                 contentPadding: EdgeInsets.all(5),
                 focusedBorder: OutlineInputBorder(
@@ -392,6 +397,8 @@ class _EditBusiness2State extends State<EditBusiness2> {
               style: TextStyle(fontSize: 16),
               keyboardType: TextInputType.visiblePassword,
               controller: business_name,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
               decoration: InputDecoration(
                 labelText: 'Business Name',
                 labelStyle: TextStyle(fontSize: 12),
@@ -465,8 +472,10 @@ class _EditBusiness2State extends State<EditBusiness2> {
             ),
             TextField(
               style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.visiblePassword,
               controller: purok,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
               decoration: InputDecoration(
                 labelText: 'Purok',
                 labelStyle: TextStyle(fontSize: 12),
@@ -486,8 +495,1065 @@ class _EditBusiness2State extends State<EditBusiness2> {
               style: TextStyle(fontSize: 16),
               keyboardType: TextInputType.visiblePassword,
               controller: stall_no,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
               decoration: InputDecoration(
                 labelText: 'Stall No.',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+
+            // SizedBox(
+            //   height: 20,
+            // ),
+            //
+            // Row(
+            //   children: [
+            //
+            //     Expanded(
+            //       child: TextField(
+            //         style: TextStyle(fontSize: 16),
+            //         keyboardType: TextInputType.visiblePassword,
+            //         controller: owner_picture,
+            //         decoration: InputDecoration(
+            //           labelText: "Owner Picture",
+            //           labelStyle: TextStyle(fontSize: 12),
+            //           contentPadding: EdgeInsets.all(5),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.fromLTRB(5,1,5,1),
+            //       child: Container(
+            //         height: 50,
+            //         width: 50,
+            //         decoration: BoxDecoration(
+            //             shape: BoxShape.rectangle,
+            //             image: DecorationImage(
+            //                 image: imageFile == null
+            //                     ? AssetImage('assets/images/folder.png')
+            //                     : FileImage(File(imageFile.path)),
+            //                 fit: BoxFit.contain)),
+            //       ),
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () async {
+            //         final tmpFile = await getImage();
+            //
+            //         setState(() {
+            //           imageFile = tmpFile;
+            //           owner_picture.text = basename(imageFile.path).toString();
+            //         });
+            //       },
+            //       child: Text('Camera'),
+            //     ),
+            //   ],
+            // ),
+            //
+            // SizedBox(
+            //   height: 10,
+            // ),
+            //
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         style: TextStyle(fontSize: 16),
+            //         keyboardType: TextInputType.visiblePassword,
+            //         controller: goods_services_picture,
+            //         decoration: InputDecoration(
+            //           labelText: "Good Services Picture",
+            //           labelStyle: TextStyle(fontSize: 12),
+            //           contentPadding: EdgeInsets.all(5),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.fromLTRB(5,1,5,1),
+            //       child: Container(
+            //         height: 50,
+            //         width: 50,
+            //         decoration: BoxDecoration(
+            //             shape: BoxShape.rectangle,
+            //             image: DecorationImage(
+            //                 image: imageFile2 == null
+            //                     ? AssetImage('assets/images/folder.png')
+            //                     : FileImage(File(imageFile2.path)),
+            //                 fit: BoxFit.contain)),
+            //       ),
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () async {
+            //         final tmpFile = await getImage();
+            //
+            //         setState(() {
+            //           imageFile2 = tmpFile;
+            //           goods_services_picture.text = basename(imageFile2.path).toString();
+            //         });
+            //       },
+            //       child: Text('Camera'),
+            //     ),
+            //
+            //   ],
+            //
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            //
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         style: TextStyle(fontSize: 16),
+            //         keyboardType: TextInputType.visiblePassword,
+            //         controller: business_permit_picture,
+            //         decoration: InputDecoration(
+            //           labelText: "Business Permit Picture",
+            //           labelStyle: TextStyle(fontSize: 12),
+            //           contentPadding: EdgeInsets.all(5),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //           ),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.fromLTRB(5,1,5,1),
+            //       child: Container(
+            //         height: 50,
+            //         width: 50,
+            //         decoration: BoxDecoration(
+            //             shape: BoxShape.rectangle,
+            //             image: DecorationImage(
+            //                 image: imageFile3 == null
+            //                     ? AssetImage('assets/images/folder.png')
+            //                     : FileImage(File(imageFile3.path)),
+            //                 fit: BoxFit.contain)),
+            //       ),
+            //     ),
+            //     ElevatedButton(
+            //       onPressed: () async {
+            //         final tmpFile = await getImage();
+            //
+            //         setState(() {
+            //           imageFile3 = tmpFile;
+            //           business_permit_picture.text = basename(imageFile3.path).toString();
+            //         });
+            //       },
+            //       child: Text('Camera'),
+            //     ),
+            //
+            //   ],
+            //
+            // ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: business_owner_name,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Owner Name',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: business_owner_number,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Owner Number',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: business_representative,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Representative',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                // Expanded(
+                //   child: TextField(
+                //     style: TextStyle(fontSize: 16),
+                //     keyboardType: TextInputType.visiblePassword,
+                //     readOnly: true,
+                //     controller: owner_gender,
+                //     decoration: InputDecoration(
+                //       labelText: 'Gender',
+                //       labelStyle: TextStyle(fontSize: 12),
+                //       contentPadding: EdgeInsets.all(5),
+                //       focusedBorder: OutlineInputBorder(
+                //         borderSide: BorderSide(color: Colors.red, width: 1.0),
+                //       ),
+                //       enabledBorder: OutlineInputBorder(
+                //         borderSide: BorderSide(color: Colors.black, width: 1.0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        // color: Colors.cyan,
+                        border: Border.all()),
+                    child: DropdownButton(
+                      // value: _genderValue,
+                      hint: Text("${owner_gender.text}"), // Not necessary for Option 1
+
+                      items: [DropdownMenuItem(
+                          child: Text("FEMALE"),
+                          value: 'FEMALE'
+                      ),
+                        DropdownMenuItem(
+                          child: Text("MALE"),
+                          value: 'MALE',
+                        ),],
+                      onChanged: (value) {
+                        setState(() {
+                          owner_gender.text = value.toString();
+                          // _genderValue = value;
+                        });
+                      },
+                    ),
+                  ),
+
+
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: ownership_type,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Ownership Type',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          ownership_type.text = "";
+                        }else {
+                          ownership_type.text = value;
+                        }
+                      });
+                    },
+                    items: ownershiptype.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: is_business_permit,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Is Busiiness Permit',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          is_business_permit.text = "";
+                        }else {
+                          is_business_permit.text = value;
+                        }
+                      });
+                    },
+                    items: isbusinesspermit.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: business_permit_status,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Busiiness Permit Status',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          business_permit_status.text = "";
+                        }else {
+                          business_permit_status.text = value;
+                        }
+                      });
+                    },
+                    items: businesspermitstatus.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: is_notice,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Is Notice',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          is_notice.text = "";
+                        }else {
+                          is_notice.text = value;
+                        }
+
+                      });
+                    },
+                    items: isnotice.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: notice_remarks,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Notice Remarks',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: business_status,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Business Status',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          business_status.text = "";
+                        }else {
+                          business_status.text = value;
+                        }
+
+
+                      });
+                    },
+                    items: businesstatus.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: payment_type,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Payment Type',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          payment_type.text = "";
+                        }else {
+                          payment_type.text = value;
+                        }
+
+                      });
+                    },
+                    items: paymenttype.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: inactive_remarks,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Inactive Remarks',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: inactive_reason,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Inactive Reason',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          inactive_reason.text = "";
+                        }else {
+                          inactive_reason.text = value;
+                        }
+
+                      });
+                    },
+                    items: inactivereason.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: fsic,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'FSIC',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          fsic.text = "";
+                        }else {
+                          fsic.text = value;
+                        }
+
+                      });
+                    },
+                    items: fsicmap.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: fsic_number,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'FSIC Number',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.number,
+              controller: capitalization_amount,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Capitalization Amount',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.number,
+              controller: gross_sale_amount,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Gross Sale Amount',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.number,
+              controller: annual_amount,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Annual Amount',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: application_status,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Application Status',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          application_status.text = "";
+                        }else {
+                          application_status.text = value;
+                        }
+
+                      });
+                    },
+                    items: applicationstatus.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.number,
+                    controller: total_employees,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Total Employees',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5,),
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.number,
+                    controller: total_male,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Total Male',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5,),
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.number,
+                    controller: total_female,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Total Female',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    style: TextStyle(fontSize: 16),
+                    keyboardType: TextInputType.visiblePassword,
+                    readOnly: true,
+                    controller: location_status,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      labelText: 'Location Status',
+                      labelStyle: TextStyle(fontSize: 12),
+                      contentPadding: EdgeInsets.all(5),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: DropdownButton(
+                    hint: Text("Select"), // Not necessary for Option 1
+                    onChanged: (value) {
+                      setState(() {
+                        if(value == "NONE"){
+                          location_status.text = "";
+                        }else {
+                          location_status.text = value;
+                        }
+                      });
+                    },
+                    items: locationstatus.map((result) {
+                      return DropdownMenuItem(
+                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
+                        value: result,
+
+                      );
+                    }).toList(),
+                  ),
+                ),],
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.number,
+              controller: location_rental_amount,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Locatioin Rental Amount',
+                labelStyle: TextStyle(fontSize: 12),
+                contentPadding: EdgeInsets.all(5),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 1.0),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              style: TextStyle(fontSize: 16),
+              keyboardType: TextInputType.visiblePassword,
+              controller: lessor_name,
+              textInputAction: TextInputAction.next,
+              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+              decoration: InputDecoration(
+                labelText: 'Lessor Name',
                 labelStyle: TextStyle(fontSize: 12),
                 contentPadding: EdgeInsets.all(5),
                 focusedBorder: OutlineInputBorder(
@@ -631,962 +1697,26 @@ class _EditBusiness2State extends State<EditBusiness2> {
             ),
 
             SizedBox(
-              height: 20,
+              height: 30,
             ),
-
-            Row(
-              children: [
-
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: owner_picture,
-                    decoration: InputDecoration(
-                      labelText: "Owner Picture",
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(5,1,5,1),
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            image: imageFile == null
-                                ? AssetImage('assets/images/folder.png')
-                                : FileImage(File(imageFile.path)),
-                            fit: BoxFit.contain)),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final tmpFile = await getImage();
-
-                    setState(() {
-                      imageFile = tmpFile;
-                      owner_picture.text = basename(imageFile.path).toString();
-                    });
-                  },
-                  child: Text('Camera'),
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: goods_services_picture,
-                    decoration: InputDecoration(
-                      labelText: "Good Services Picture",
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(5,1,5,1),
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            image: imageFile2 == null
-                                ? AssetImage('assets/images/folder.png')
-                                : FileImage(File(imageFile2.path)),
-                            fit: BoxFit.contain)),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final tmpFile = await getImage();
-
-                    setState(() {
-                      imageFile2 = tmpFile;
-                      goods_services_picture.text = basename(imageFile2.path).toString();
-                    });
-                  },
-                  child: Text('Camera'),
-                ),
-
-              ],
-
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: business_permit_picture,
-                    decoration: InputDecoration(
-                      labelText: "Business Permit Picture",
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(5,1,5,1),
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        image: DecorationImage(
-                            image: imageFile3 == null
-                                ? AssetImage('assets/images/folder.png')
-                                : FileImage(File(imageFile3.path)),
-                            fit: BoxFit.contain)),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final tmpFile = await getImage();
-
-                    setState(() {
-                      imageFile3 = tmpFile;
-                      business_permit_picture.text = basename(imageFile3.path).toString();
-                    });
-                  },
-                  child: Text('Camera'),
-                ),
-
-              ],
-
-            ),
-
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: business_owner_name,
-              decoration: InputDecoration(
-                labelText: 'Owner Name',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: business_owner_number,
-              decoration: InputDecoration(
-                labelText: 'Owner Number',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: business_representative,
-              decoration: InputDecoration(
-                labelText: 'Representative',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                // Expanded(
-                //   child: TextField(
-                //     style: TextStyle(fontSize: 16),
-                //     keyboardType: TextInputType.visiblePassword,
-                //     readOnly: true,
-                //     controller: owner_gender,
-                //     decoration: InputDecoration(
-                //       labelText: 'Gender',
-                //       labelStyle: TextStyle(fontSize: 12),
-                //       contentPadding: EdgeInsets.all(5),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: Colors.red, width: 1.0),
-                //       ),
-                //       enabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: Colors.black, width: 1.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        // color: Colors.cyan,
-                        border: Border.all()),
-                    child: DropdownButton(
-                      // value: _genderValue,
-                      hint: Text("${owner_gender.text}"), // Not necessary for Option 1
-
-                      items: [DropdownMenuItem(
-                          child: Text("female"),
-                          value: 'female'
-                      ),
-                        DropdownMenuItem(
-                          child: Text("male"),
-                          value: 'male',
-                        ),],
-                      onChanged: (value) {
-                        setState(() {
-                          owner_gender.text = value.toString();
-                          // _genderValue = value;
-                        });
-                      },
-                    ),
-                  ),
-
-
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: ownership_type,
-                    decoration: InputDecoration(
-                      labelText: 'Ownership Type',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        ownership_type.text = value;
-                      });
-                    },
-                    items: ownershiptype.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: is_business_permit,
-                    decoration: InputDecoration(
-                      labelText: 'Is Busiiness Permit',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        is_business_permit.text = value;
-                      });
-                    },
-                    items: isbusinesspermit.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: business_permit_status,
-                    decoration: InputDecoration(
-                      labelText: 'Busiiness Permit Status',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        business_permit_status.text = value;
-                      });
-                    },
-                    items: businesspermitstatus.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: is_notice,
-                    decoration: InputDecoration(
-                      labelText: 'Is Notice',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        is_notice.text = value;
-                      });
-                    },
-                    items: isnotice.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: notice_remarks,
-              decoration: InputDecoration(
-                labelText: 'Notice Remarks',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: business_status,
-                    decoration: InputDecoration(
-                      labelText: 'Business Status',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        business_status.text = value;
-                      });
-                    },
-                    items: businesstatus.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: payment_type,
-                    decoration: InputDecoration(
-                      labelText: 'Payment Type',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        payment_type.text = value;
-                      });
-                    },
-                    items: paymenttype.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: inactive_remarks,
-              decoration: InputDecoration(
-                labelText: 'Inactive Remarks',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: inactive_reason,
-                    decoration: InputDecoration(
-                      labelText: 'Inactive Reason',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        inactive_reason.text = value;
-                      });
-                    },
-                    items: inactivereason.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: fsic,
-                    decoration: InputDecoration(
-                      labelText: 'FSIC',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        fsic.text = value;
-                      });
-                    },
-                    items: fsicmap.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: fsic_number,
-              decoration: InputDecoration(
-                labelText: 'FSIC Number',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.number,
-              controller: capitalization_amount,
-              decoration: InputDecoration(
-                labelText: 'Capitalization Amount',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.number,
-              controller: gross_sale_amount,
-              decoration: InputDecoration(
-                labelText: 'Gross Sale Amount',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: application_status,
-                    decoration: InputDecoration(
-                      labelText: 'Application Status',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        application_status.text = value;
-                      });
-                    },
-                    items: applicationstatus.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.number,
-                    controller: total_employees,
-                    decoration: InputDecoration(
-                      labelText: 'Total Employees',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5,),
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.number,
-                    controller: total_male,
-                    decoration: InputDecoration(
-                      labelText: 'Total Male',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5,),
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.number,
-                    controller: total_female,
-                    decoration: InputDecoration(
-                      labelText: 'Total Female',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    style: TextStyle(fontSize: 16),
-                    keyboardType: TextInputType.visiblePassword,
-                    readOnly: true,
-                    controller: location_status,
-                    decoration: InputDecoration(
-                      labelText: 'Location Status',
-                      labelStyle: TextStyle(fontSize: 12),
-                      contentPadding: EdgeInsets.all(5),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
-                  child: DropdownButton(
-                    hint: Text("Select"), // Not necessary for Option 1
-                    onChanged: (value) {
-                      setState(() {
-                        location_status.text = value;
-                      });
-                    },
-                    items: locationstatus.map((result) {
-                      return DropdownMenuItem(
-                        child: Container(width:100,child: new Text(result,style: TextStyle(fontSize: 12,),overflow:TextOverflow.ellipsis,)),
-                        value: result,
-
-                      );
-                    }).toList(),
-                  ),
-                ),],
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.number,
-              controller: location_rental_amount,
-              decoration: InputDecoration(
-                labelText: 'Locatioin Rental Amount',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller: lessor_name,
-              decoration: InputDecoration(
-                labelText: 'Lessor Name',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
-
-
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller:  collector_signature,
-              decoration: InputDecoration(
-                labelText: 'Collector Signature',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
+            // TextField(
+            //   style: TextStyle(fontSize: 16),
+            //   keyboardType: TextInputType.visiblePassword,
+            //   controller:  collector_signature,
+            //   textInputAction: TextInputAction.next,
+            //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+            //   decoration: InputDecoration(
+            //     labelText: 'Collector Signature',
+            //     labelStyle: TextStyle(fontSize: 12),
+            //     contentPadding: EdgeInsets.all(5),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //     ),
+            //   ),
+            // ),
 
             // SizedBox(
             //   height: 10,
@@ -1725,25 +1855,25 @@ class _EditBusiness2State extends State<EditBusiness2> {
             //
             //
             //
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              style: TextStyle(fontSize: 16),
-              keyboardType: TextInputType.visiblePassword,
-              controller:  submitted_from,
-              decoration: InputDecoration(
-                labelText: 'Submitted From',
-                labelStyle: TextStyle(fontSize: 12),
-                contentPadding: EdgeInsets.all(5),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 10,
+            // ),
+            // TextField(
+            //   style: TextStyle(fontSize: 16),
+            //   keyboardType: TextInputType.visiblePassword,
+            //   controller:  submitted_from,
+            //   decoration: InputDecoration(
+            //     labelText: 'Submitted From',
+            //     labelStyle: TextStyle(fontSize: 12),
+            //     contentPadding: EdgeInsets.all(5),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.red, width: 1.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.black, width: 1.0),
+            //     ),
+            //   ),
+            // ),
 
 
 
@@ -1769,6 +1899,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
 
                   bdata.qr_code = qr_code.text;
                   bdata.qrcode = int.parse(qrcode.text);
+                  bdata.business_code = business_code.text;
                   bdata.business_name = business_name.text;
                   bdata.barangay = int.parse(barangay.text);
                   bdata.purok = purok.text;
@@ -1798,6 +1929,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
                   bdata.application_status= application_status.text;
                   bdata.capitalization_amount= capitalization_amount.text;
                   bdata.gross_sale_amount= gross_sale_amount.text;
+                  bdata.annual_amount= annual_amount.text;
                   bdata.total_employees= int.parse(total_employees.text);
                   bdata.total_male  = int.parse(total_male.text);
                   bdata.total_female= int.parse(total_female.text);
@@ -1813,7 +1945,7 @@ class _EditBusiness2State extends State<EditBusiness2> {
                   bdata.team= 1;
                   bdata.created_by= 1;
                   bdata.modified_by= 1;
-                  bdata.submitted_from= submitted_from.text;
+                  bdata.submitted_from = "Mobile";
                   bdata.qrcode_url = qrcode_url;
 
                   _businessSend(context,this.widget.busdata.id, bdata);

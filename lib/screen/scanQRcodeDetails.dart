@@ -1,8 +1,16 @@
 import 'package:businesstaxmap/landingpage.dart';
 import 'package:businesstaxmap/models/business.dart';
+import 'package:businesstaxmap/screen/photoview.dart';
 import 'package:businesstaxmap/screen/qrscanner.dart';
+import 'package:businesstaxmap/screen/lineBus.dart';
+import 'package:businesstaxmap/screen/mapsperbus.dart';
+import 'package:businesstaxmap/screen/taxmap.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'landingpage2.dart';
 
 
 
@@ -20,6 +28,25 @@ class scanQRDetails extends StatefulWidget {
 }
 
 class _scanQRDetailsState extends State<scanQRDetails> {
+
+
+
+  busStatus() {
+    String response = "Active with extension";
+    String response2 = "Active w/o extension";
+    String response3 = "Inactive";
+
+    if (this.widget.busdata.business_status == "ACTIVE1") {
+      return response;
+    } else if (this.widget.busdata.business_status == "ACTIVE2") {
+      return response2;
+    }else {
+      return response3;
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +56,7 @@ class _scanQRDetailsState extends State<scanQRDetails> {
         leading: IconButton(onPressed: (){
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LandingPage()),
+            MaterialPageRoute(builder: (context) => LandingPage2()),
           );
         }, icon: Icon(Icons.arrow_back)),
         title: Text("Business Details"),),
@@ -37,135 +64,1101 @@ class _scanQRDetailsState extends State<scanQRDetails> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
+            child: Column(
+              children: [
+                Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 10,),
-                        Text("Business Name:"),
-                        SizedBox(height: 3,),
-                        Text("Barangay:"),
-                        SizedBox(height: 3,),
-                        Text("Purok:"),
-                        SizedBox(height: 3,),
-                        Text("Stall No.:"),
-                        SizedBox(height: 3,),
-                        Text("Business Owner Name:"),
-                        SizedBox(height: 3,),
-                        Text("Business Owner Number:"),
-                        SizedBox(height: 3,),
-                        Text("Business Representative:"),
-                        SizedBox(height: 3,),
-                        Text("Ownership Type:"),
-                        SizedBox(height: 3,),
-                        Text("Is Business Permit:"),
-                        SizedBox(height: 3,),
-                        Text("Business Permit Status:"),
-                        SizedBox(height: 3,),
-                        Text("Is Notice:"),
-                        SizedBox(height: 3,),
-                        Text("Notice Remarks:"),
-                        SizedBox(height: 3,),
-                        Text("Busienss Status:"),
-                        SizedBox(height: 3,),
-                        Text("Payment Type:"),
-                        SizedBox(height: 3,),
-                        Text("In Active Remarks:"),
-                        SizedBox(height: 3,),
-                        Text("In Active Reason:"),
-                        SizedBox(height: 3,),
-                        Text("FSIC:"),
-                        SizedBox(height: 3,),
-                        Text("FSIC Number:"),
-                        SizedBox(height: 3,),
-                        Text("Capitalization Amount:"),
-                        SizedBox(height: 3,),
-                        Text("Application Status:"),
-                        SizedBox(height: 3,),
-                        Text("Total Employees:"),
-                        SizedBox(height: 3,),
-                        Text("Total Male:"),
-                        SizedBox(height: 3,),
-                        Text("Total Female:"),
-                        SizedBox(height: 3,),
-                        Text("Location Status:"),
-                        SizedBox(height: 3,),
-                        Text("Location Rental Amount:"),
-                        SizedBox(height: 3,),
-                        Text("Lessor Name:"),
-
+                        Flexible(
+                          child: Text("${this.widget.busdata.business_name}",
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis),
+                        ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10,),
-                          Text("${this.widget.busdata.business_name}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.bar_name}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.purok}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.stall_no}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.business_owner_name}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.business_owner_number}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.business_representative}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.ownership_type}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.is_business_permit}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.business_permit_status}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.is_notice}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.notice_remarks}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.business_status}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.payment_type}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.inactive_remarks}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.inactive_reason}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.fsic}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.fsic_number}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.capitalization_amount}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.application_status}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.total_employees}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.total_male}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.total_female}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.location_status}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.location_rental_amount}"),
-                          SizedBox(height: 3,),
-                          Text("${this.widget.busdata.lessor_name}"),
-
-
-
-                        ],
-                      ),
-                    )
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Address: Purok ${this.widget.busdata.purok},",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54),
+                        ),
+                        Text(
+                          " ${this.widget.busdata.bar_name}",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Business Code: ${this.widget.busdata.business_code}",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 80.0,
+                      width: 80,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: "${this.widget.busdata.owner_picture}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // SizedBox(width: 40,),
+                          CircleAvatar(
+                            radius: 15,
+                            backgroundColor: Colors.purple,
+                            child: Icon(
+                              Icons.person,
+                              size: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: Text(
+                              "${this.widget.busdata.business_owner_name}",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // SizedBox(width: 40,),
+                          CircleAvatar(
+                            radius: 15,
+                            backgroundColor: Colors.purple,
+                            child: Icon(
+                              Icons.phone,
+                              size: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "${this.widget.busdata.business_owner_number}",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // SizedBox(width: 30,),
+                    Container(
+                        height: 80,
+                        width: 80,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TaxMap(
+                                      this.widget.busdata.id,
+                                      this.widget.busdata.business_name,
+                                      this.widget.busdata)),
+                            );
+                          },
+                          child: Text("Tax Map",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        )),
+
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        width: 80,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LineBus(
+                                      this.widget.busdata.id,
+                                      this.widget.busdata.business_name,
+                                      this.widget.busdata)),
+                            );
+                          },
+                          child: Text("Line Business",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        )),
+
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                        height: 80,
+                        width: 80,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MapsperBus(
+                                      this.widget.busdata.business_name,
+                                      double.parse(
+                                          this.widget.busdata.gps_latitude),
+                                      double.parse(
+                                          this.widget.busdata.gps_longitude))),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Text("Maps"),
+                              Icon(
+                                Icons.map_outlined,
+                                size: 60,
+                              )
+                            ],
+                          ),
+                        )),
+                  ],
+                ),
+
+/////////////////////////////////////////////////////////////////
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Representative",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      "${this.widget.busdata.business_representative}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Is Business Permit:",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.is_business_permit}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Business Status",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+
+                                    child: Text(
+                                      "${busStatus()}",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Payment Type",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.payment_type}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "FSIC",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.fsic}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Capitalization Amount",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.capitalization_amount}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Gross Sales",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.gross_sale_amount}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Annual Payable",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.annual_amount}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Location Status",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.location_status}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Lessor Name",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.lessor_name}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
+                      Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Ownership Type",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.ownership_type}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Business Permit Status",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.business_permit_status}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Is Notice",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.is_notice}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Notice Remarks",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.notice_remarks}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "FSIC Number",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.fsic_number}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Application Status",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.application_status}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Location Rental Amount",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.location_rental_amount}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total Male",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.total_male}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              ///////////////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total Female",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.total_female}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              /////////////////////////////////////////////////////////////////////////////////
+                              SizedBox(
+                                height: 20,
+                              ),
+
+                              Row(
+                                children: [
+                                  Text(
+                                    "Total Employees",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black54),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${this.widget.busdata.total_employees}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
+                ),
+
+                ///////////////
+
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Business Permit Picture",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => imageView(
+                                this.widget.busdata,
+                                "${this.widget.busdata.business_permit_picture}",
+                              )),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl:
+                            "${this.widget.busdata.business_permit_picture}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+
+                    //////////////////////////////////////////////////////////////////
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Owner Signature Picture",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => imageView(
+                                this.widget.busdata,
+                                "${this.widget.busdata.owner_signature}",
+                              )),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl: "${this.widget.busdata.owner_signature}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+                    //////////////////////////////////////////////////////////////////
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Goods Services Picture",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => imageView(
+                                this.widget.busdata,
+                                "${this.widget.busdata.goods_services_picture}",
+                              )),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl:
+                            "${this.widget.busdata.goods_services_picture}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Picture 1",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => imageView(
+                                this.widget.busdata,
+                                "${this.widget.busdata.picture1}",
+                              )),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl: "${this.widget.busdata.picture1}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Picture 2",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => imageView(
+                                this.widget.busdata,
+                                "${this.widget.busdata.picture2}",
+                              )),
+                        );
+                      },
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: CachedNetworkImage(
+                            imageUrl: "${this.widget.busdata.picture2}",
+                            height: 150.0,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image_sharp),
+                          )),
+                    ),
+                  ],
+                )
+              ],
             ),
           )
         ],

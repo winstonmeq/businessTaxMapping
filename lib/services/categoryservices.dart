@@ -17,4 +17,20 @@ class CategoryServices {
   }
 
 
+  addCategorySQL(Category data) async {
+    List<Map> items = await _repository.getLocalByCondition('categoryTable', 'id', data.id);
+    if(items.length > 0){
+      return await _repository.updateLocal('categoryTable', 'id', data.toMap());
+    }
+    return await _repository.saveLocal('categoryTable', data.toMap());
+  }
+
+
+
+
+
+
+
+
+
 }

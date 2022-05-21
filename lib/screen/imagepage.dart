@@ -21,6 +21,7 @@ class _UploadImageState extends State<UploadImage> {
   String status = '';
 
   Future getImage() async {
+    // ignore: deprecated_member_use
     PickedFile pickedImage = await ImagePicker().getImage(
         source:  ImageSource.gallery,
         imageQuality: 50);

@@ -11,9 +11,9 @@ class Repository {
   DatabaseConnection _connection;
   String _baseUrl = 'https://btm-101.herokuapp.com/api/v1';
  // String _baseUrl = 'https://mid-btm.herokuapp.com/api';
-  String _baseUrl2 = 'https://about.google/static/data/';
-  var url =
-  Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': '{http}'});
+ //  String _baseUrl2 = 'https://about.google/static/data/';
+ //  var url =
+ //  Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': '{http}'});
 
   Repository(){
     _connection = DatabaseConnection();
@@ -49,9 +49,8 @@ class Repository {
     return await http.get(Uri.parse(_baseUrl + "/" + api),headers: _setHeaders());
   }
 
-  httpGet2(String api, int busId) async {
-    await _getToken();
-    return await http.get(Uri.parse(_baseUrl + "/" + api + busId.toString()));
+  httpGet2(String api, int records) async {
+    return await http.get(Uri.parse(_baseUrl + "/" + api + records.toString()));
   }
 
 
@@ -66,11 +65,12 @@ class Repository {
     return await http.post(Uri.parse(_baseUrl + "/" + api), body: data, headers: _setHeaders());
   }
 
-  // httpPost2(String api, data) async {
-  //   await _getToken();
-  //   print('this my token ${token}');
-  //   return await http.post(Uri.parse(_baseUrl + "/" + api), body: data);
-  // }
+
+
+  httpPost2(String api, data) async {
+
+    return await http.post(Uri.parse(_baseUrl + "/" + api), body: data);
+  }
 
 
   httpPut(String api , int id, data) async {
@@ -98,6 +98,15 @@ class Repository {
     return await http.get(Uri.parse(_baseUrl + "/" + api + code));
   }
 
+  httpsearch(String api , String searchval) async {
+    // await _getToken();
+    // print('this my token ${token}');
+    return await http.get(Uri.parse(_baseUrl + "/" + api + searchval));
+  }
+
+
+
+
 
 
 
@@ -113,9 +122,6 @@ class Repository {
   }
 
 
-  httpGet3(String api) async {
-    return await http.get(Uri.parse(_baseUrl2 + "/" + api));
-  }
 
   // httpGetById(String api, categoryId) async {
   //   return await http.get(_baseUrl + "/" + api + "/" + categoryId.toString());
@@ -146,7 +152,7 @@ class Repository {
 
   getLocalByCondition(table, columnName, conditionalValue) async {
     var conn = await database;
-    return await conn.rawQuery('SELECT * FROM $table WHERE $columnName=?', ['$conditionalValue']);
+    return await conn.rawQuery('SELECT * FROM $table WHERE $columnName LIKE?', ['$conditionalValue%']);
   }
 
 

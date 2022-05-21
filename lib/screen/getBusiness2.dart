@@ -5,40 +5,45 @@ import 'package:businesstaxmap/screen/lineBus.dart';
 import 'package:businesstaxmap/screen/businessDetails.dart';
 import 'package:businesstaxmap/screen/search.dart';
 import 'package:businesstaxmap/screen/testlinebus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:businesstaxmap/services/business_services.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import 'editBusiness3.dart';
+import 'landingpage2.dart';
 
-class GetBusiness extends StatefulWidget {
+
+class GetBusiness2 extends StatefulWidget {
   @override
-  _GetBusiness createState() => _GetBusiness();
+  _GetBusiness2 createState() => _GetBusiness2();
 }
 
 
-class _GetBusiness extends State<GetBusiness> {
-
+class _GetBusiness2 extends State<GetBusiness2> {
 
   List<Business> businessArray = [];
+
   bool isLoading = true;
 
-  _getBusiness() async {
+  _getBusinessSQL() async {
     try{
       BusinessServices _businessServices = BusinessServices();
-      var response = await _businessServices.getBusiness();
-      var _list = json.decode(response.body);
-      print(_list);
+      var sqlresponse = await _businessServices.getSQLdata2();
+      print('businessdata gikan sa sqldb = ${sqlresponse}');
 
-
-      _list['results'].forEach((data) {
-        var bus = Business();
+      if(sqlresponse != null) {
+        sqlresponse.forEach((data) {
+          var bus = Business();
           bus.id = data['id'];
           bus.qr_code = data['qr_code'];
           bus.qrcode = data['qrcode'];
           bus.business_name = data['business_name'];
+          bus.business_code = data['business_code'];
           bus.barangay = data['barangay'];
-           bus.bar_name = data['bar_name'];
-          bus.purok= data['purok'];
+          bus.bar_name = data['bar_name'];
+          bus.purok = data['purok'];
           bus.stall_no = data['stall_no'];
           bus.gps_longitude = data['gps_longitude'];
           bus.gps_latitude = data['gps_latitude'];
@@ -55,6 +60,7 @@ class _GetBusiness extends State<GetBusiness> {
           bus.is_business_permit = data['is_business_permit'];
           bus.business_permit_status = data['business_permit_status'];
           bus.is_notice = data['is_notice'];
+          bus.notice_remarks = data['notice_remarks'];
           bus.business_status = data['business_status'];
           bus.payment_type = data['payment_type'];
           bus.inactive_remarks = data['inactive_remarks'];
@@ -79,13 +85,13 @@ class _GetBusiness extends State<GetBusiness> {
           bus.submitted_from = data['submitted_from'];
           bus.qrcode_url = data['qrcode_url'];
 
-          //businessArray.add(bus);
-        setState(() {
-          _savetoSQL(context, bus);
+          setState(() {
+            businessArray.add(bus);
+          });
+
+
         });
-
-
-      });
+      }//endif
 
     }catch(e){
       print(e);
@@ -98,33 +104,14 @@ class _GetBusiness extends State<GetBusiness> {
     setState(() {
       isLoading = false;
     });
-
   }
-
-  _savetoSQL(BuildContext context, Business busdata) async {
-
-    BusinessServices _businessServices = BusinessServices();
-    var sqlresponse = await _businessServices.addBusinessSQL(busdata);
-
-    print(sqlresponse);
-
-
-  }
-
 
 
 
 
   @override
   void initState() {
-
-    if(businessArray.length == 0){
-      print("mag load sang data kay 0 ang value");
-      _getBusiness();
-    }else {
-      print("naa sulod nga data");
-    }
-
+      _getBusinessSQL();
     super.initState();
   }
 
@@ -137,23 +124,19 @@ class _GetBusiness extends State<GetBusiness> {
         leading:  IconButton(onPressed: (){
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => LandingPage()),
+            MaterialPageRoute(builder: (context) => LandingPage2()),
           );
         }, icon: Icon(Icons.arrow_back)),
-        title: Text("List of Business"),
+        title: Text("List of Business Offline"),
         actions: [
           IconButton(
             icon: const Icon(Icons.search_sharp),
-           // tooltip: 'Search',
+            // tooltip: 'Search',
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SearchBus()),
-              );
-              // showSearch(context: context,
-              //     delegate: DataSearch(
-              //         businessArray,
-              //        ));
+              showSearch(context: context,
+                  delegate: DataSearch(
+                      businessArray,
+                     ));
             },
           ),
         ],
@@ -166,37 +149,58 @@ class _GetBusiness extends State<GetBusiness> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => EditBusiness2(businessArray[index])),
+                    MaterialPageRoute(builder: (context) => EditBusiness3(businessArray[index])),
                   );
                 },
 
-               child: ListTile(
+                child: ListTile(
+                  leading: (ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => busDetails(businessArray[index])),
 
-                 leading: (ElevatedButton(
-                     onPressed: (){
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => busDetails(businessArray[index])),
+                      );
+                    },child: Text("Details"),
+                  )
+                  ),
+                  title: Text('${businessArray[index].business_name}'),
+                  subtitle: Text('${businessArray[index].id}'),
 
-                       );
-                     },child: Text("View"),
-                 )
-                 ),
-                 title: Text('${businessArray[index].business_name}'),
-                 subtitle: Text('${businessArray[index].id}'),
-                 // trailing: ElevatedButton(
-                 //   onPressed: (){
-                 //     Navigator.push(
-                 //       context,
-                 //       MaterialPageRoute(builder: (context) => LineBus(businessArray[index].id,businessArray[index].business_name)),
-                 //     );
-                 //   },child: Text("Line of Buss."),style:ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-                 // ),
-               ),
+                ),
               ),
             );
 
           }),
+        // bottomNavigationBar:Row(
+        //   children: [
+        //     Expanded(
+        //       flex: 2,
+        //       child:  Text(""),
+        //     ),
+        //     Expanded(
+        //       flex: 1,
+        //       child:  Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: FloatingActionButton(
+        //
+        //             onPressed: () async{
+        //               SharedPreferences _prefs = await SharedPreferences.getInstance();
+        //
+        //               _getBusinessSQLUpload();
+        //
+        //             }, child: Icon(Icons.upload_file,size: 30,),
+        //           backgroundColor: Colors.red,
+        //           mini: false,
+        //
+        //
+        //         ),
+        //       ),
+        //     )
+        //
+        //   ],
+        //
+        // )
     );
 
   }
@@ -208,7 +212,7 @@ class _GetBusiness extends State<GetBusiness> {
 
 class DataSearch extends SearchDelegate{
   final List<Business> listbus;
- // final VoidCallback oneClick;
+  // final VoidCallback oneClick;
   DataSearch(this.listbus);
 
 
@@ -245,13 +249,12 @@ class DataSearch extends SearchDelegate{
               onTap: (){
                 showResults(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                    busDetails(bus)));
+                    EditBusiness3(bus)));
 
 
               },
               //leading: Image.network(prd.photo),
               title: Text('${bus.business_name}'),
-             // trailing: Text("P ${prd.price.toString()}",style: TextStyle(fontWeight: FontWeight.bold),),
               subtitle: Text('${bus.bar_name}'),
 
             ),
@@ -277,12 +280,19 @@ class DataSearch extends SearchDelegate{
             onTap: (){
               showResults(context);
               Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                  busDetails(bus)));
+                  EditBusiness3(bus)));
 
             },
             //leading: Image.network(prd.photo),
             title: Text('${bus.business_name}'),
-            // subtitle: Text("${prd.isAvailable}"),
+            subtitle: Text('${bus.bar_name}'),
+            trailing: ElevatedButton(onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => busDetails(bus)),
+
+              );
+            },child: Text('Details'),),
 
           );
         }

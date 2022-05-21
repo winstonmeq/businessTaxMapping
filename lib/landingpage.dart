@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:businesstaxmap/main.dart';
+import 'package:businesstaxmap/screen/Addphoto.dart';
+import 'package:businesstaxmap/screen/addBusiness.dart';
+import 'package:businesstaxmap/screen/addphoto1.dart';
 import 'package:businesstaxmap/screen/business_screen.dart';
 import 'package:businesstaxmap/screen/editBusiness.dart';
 import 'package:businesstaxmap/screen/getBusiness.dart';
@@ -12,10 +15,10 @@ import 'package:businesstaxmap/screen/qrcodebusiness.dart';
 import 'package:businesstaxmap/screen/qrscanner.dart';
 import 'package:businesstaxmap/screen/scanQRcodeDetails.dart';
 import 'package:businesstaxmap/screen/testapi.dart';
-import 'package:businesstaxmap/screen/uploadImage.dart';
 import 'package:businesstaxmap/services/business_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/business.dart';
 
@@ -40,7 +43,6 @@ class _LandingPageState extends State<LandingPage> {
       _list.forEach((data) {
 
         var bus = Business();
-
         bus.id = data['id'];
         bus.qr_code = data['qr_code'];
         bus.qrcode = data['qrcode'];
@@ -112,13 +114,17 @@ class _LandingPageState extends State<LandingPage> {
     setState(() {
       isLoading = false;
     });
+
+
+
   }
 
 
   @override
   void initState() {
- //   _getBusiness();
-    super.initState();
+    businessArray.clear();
+    print(businessArray.length);
+   super.initState();
   }
 
 
@@ -138,9 +144,9 @@ class _LandingPageState extends State<LandingPage> {
         body: ListView(
 
             children: [
-        Card(
-        child: Column(
+        Column(
         children: [
+          SizedBox(height: 30,),
           Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -148,14 +154,25 @@ class _LandingPageState extends State<LandingPage> {
               minWidth: 160,
               child: RaisedButton(
                 onPressed: () {
-                  _getBusiness();
+                  if(businessArray.length == 0){
+                    _getBusiness();
+                    print("magkuha sang eh sulod");
+                  }else {
+                    print("naa sulod");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditBusiness(businessArray.single)),
+                    );
+                  }
+
                 },
                 color: Colors.orangeAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Icon(Icons.home,size: 55,),
+                      Icon(Icons.business_sharp,size: 40,),
                       Text(
                         'New Business',
                         style: TextStyle(fontSize: 16),
@@ -166,7 +183,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             SizedBox(
-              width: 10,
+              width: 20,
             ),
             ButtonTheme(
               minWidth: 160,
@@ -175,7 +192,7 @@ class _LandingPageState extends State<LandingPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => GetBusiness()),
+                        builder: (context) => addBusinessOff()),
                   );
                 },
                 color: Colors.orangeAccent,
@@ -183,7 +200,7 @@ class _LandingPageState extends State<LandingPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Icon(Icons.library_books,size:55),
+                      Icon(Icons.library_books,size:40),
                       Text(
                         'List Business',
                         style: TextStyle(fontSize: 16),
@@ -196,7 +213,7 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
 
         Row(
@@ -217,7 +234,7 @@ class _LandingPageState extends State<LandingPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Icon(Icons.home,size: 55,),
+                      Icon(Icons.qr_code_scanner,size: 40,),
                       Text('QR Scanner',
                         style: TextStyle(fontSize: 16),
                       )
@@ -227,7 +244,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             SizedBox(
-              width: 10,
+              width: 20,
             ),
             ButtonTheme(
               minWidth: 160,
@@ -244,7 +261,7 @@ class _LandingPageState extends State<LandingPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      Icon(Icons.library_books,size:55),
+                      Icon(Icons.map_sharp,size:40),
                       Text('Mapping',
                         style: TextStyle(fontSize: 16),
                       )
@@ -255,8 +272,36 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ],
         ),
+
+
+          // SizedBox(
+          //   width: 20,
+          // ),
+          // ButtonTheme(
+          //   minWidth: 160,
+          //   child: RaisedButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => UploadImageDemo()),
+          //       );
+          //     },
+          //     color: Colors.orangeAccent,
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Column(
+          //         children: [
+          //           Icon(Icons.map_sharp,size:40),
+          //           Text('Take Photo',
+          //             style: TextStyle(fontSize: 16),
+          //           )
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
-      ),
       ),
             ],
 
@@ -266,13 +311,16 @@ class _LandingPageState extends State<LandingPage> {
             children: [
               Container(
                 child: Expanded(
-                  child:  ElevatedButton(onPressed: (){
+                  child:  ElevatedButton(onPressed: () async{
+                    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MyApp()),
                     );
                     businessArray.clear();
+                    _prefs.clear();
                     isLoading = true;
 
                   }, child: Text("Logout!")),

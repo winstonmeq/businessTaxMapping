@@ -13,6 +13,8 @@ import 'dart:async';
 import 'package:screen/screen.dart';
 import 'dart:convert';
 
+import 'landingpage2.dart';
+
 
 const flashOn = 'FLASH ON';
 const flashOff = 'FLASH OFF';
@@ -61,11 +63,11 @@ class _QRViewExampleState extends State<QRViewExample> {
   _getscanQRCode(String code) async {
     try{
       BusinessServices _businessServices = BusinessServices();
-      var response = await _businessServices.scanQR(code);
-      var _list = json.decode(response.body);
-      print(_list);
+      var sqlresponse = await _businessServices.scanQRBusinessName(code);
 
-      _list.forEach((data) {
+      print(sqlresponse);
+
+      sqlresponse.forEach((data) {
 
         var bus = Business();
 
@@ -85,7 +87,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         bus.goods_services_picture = data['goods_services_picture'];
         bus.business_permit_picture = data['business_permit_picture'];
         bus.business_owner_name = data['business_owner_name'];
-        bus.business_owner_name = data['business_owner_number'];
+        bus.business_owner_number = data['business_owner_number'];
         bus.business_representative = data['business_representative'];
         bus.owner_gender = data['owner_gender'];
         bus.ownership_type = data['ownership_type'];
@@ -135,14 +137,6 @@ class _QRViewExampleState extends State<QRViewExample> {
     );
    // isLoading = false;
   }
-
-
-
-
-
-
-
-
 
 
 
@@ -235,7 +229,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LandingPage()),
+                                  builder: (context) => LandingPage2()),
                             );
 
                           },child: Text("Home"),

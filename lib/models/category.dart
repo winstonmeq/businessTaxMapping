@@ -1,17 +1,17 @@
 class Category {
   int id;
   String category_name;
-  bool is_pushed;
 
 
-  Category({this.id,this.category_name, this.is_pushed});
+
+  Category({this.id,this.category_name});
 
 
   Map<String, dynamic> toMap() {
     return {
-    'id': id,
+      'id': id,
       'category_name': category_name,
-      'iis_pushed': is_pushed
+
     };
 
   }
